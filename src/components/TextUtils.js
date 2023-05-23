@@ -6,6 +6,10 @@ export default function TextUtil() {
 
     const [process, setProcess] = useState("default");
 
+    const [copyStatus, setCopyStatus] = useState("Copy Text");
+
+
+
     const getWordLength = (text) => {
         let noSpaceText = text.split(" ").filter((element) => element !== "").join(" ") // W/O spaces
         let noNewLine = noSpaceText.split("\n").filter((element) => element !== "").join(" ") // W/O new lines
@@ -18,14 +22,19 @@ export default function TextUtil() {
         navigator.clipboard.readText()
             .then(data => {
                 setValue(data);
+                setOutput(data);
             })
             .catch(error => {
-                
+
             });
     }
 
     const copyText = () => {
-        navigator.clipboard.writeText(output)
+        setCopyStatus("Copied!");
+        navigator.clipboard.writeText(output);
+        setTimeout(() => {
+            setCopyStatus("Copy Text")
+        }, 1000);
     }
 
     const toUpperCase = () => {
@@ -159,6 +168,7 @@ export default function TextUtil() {
                             <button type="button" className="btn btn-outline-primary border-2 fw-bold btn-sm" onClick={executeProcess}>Execute</button>
                         </div>
 
+                        {/* In case if I ever want to add Buttons! */}
                         {/* <button type="button" className="btn btn-outline-primary border-2 fw-bold btn-sm mt-3" onClick={toUpperCase}>Uppercase</button>
                         <button type="button" className="btn btn-outline-primary border-2 fw-bold btn-sm mt-3" onClick={toLowerCase}>Lowercase</button>
                         <button type="button" className="btn btn-outline-primary border-2 fw-bold btn-sm mt-3" onClick={toCapitalize}>Capitalize</button>
@@ -176,7 +186,7 @@ export default function TextUtil() {
                     <div className="preview">
                         <div className="d-flex justify-content-between mb-2">
                             <h4>Output:</h4>
-                            <button type="button" className="btn btn-outline-success border-2 fw-bold btn-sm" onClick={copyText}>Copy Text</button>
+                            <button type="button" className="btn btn-outline-success border-2 fw-bold btn-sm" onClick={copyText}>{copyStatus}</button>
                         </div>
                         <pre style={{ fontSize: "14px", whiteSpace: "pre-wrap", wordWrap: "break-word" }} className="bg-dark text-white p-3">{output === "" ? "" : output}</pre>
 
